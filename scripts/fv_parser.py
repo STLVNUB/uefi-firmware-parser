@@ -19,7 +19,7 @@ def _process_show_extract(parsed_object):
         parsed_object.showinfo('')
 
     if args.extract:
-        print "Dumping..."
+        print("Dumping...")
         parsed_object.dump(args.output)
 
 
@@ -38,7 +38,7 @@ def brute_search_flash(data):
 
 
 def parse_firmware_capsule(data, name=0):
-    print "Parsing FC at index (%s)." % hex(name)
+    print("Parsing FC at index (%s)." % hex(name))
     firmware_capsule = FirmwareCapsule(data, name)
     if not firmware_capsule.valid_header:
         return
@@ -46,13 +46,13 @@ def parse_firmware_capsule(data, name=0):
 
 
 def parse_file(data, name=""):
-    print "Parsing Firmware File"
+    print("Parsing Firmware File")
     firmware_file = FirmwareFile(data)
     _process_show_extract(firmware_file)
 
 
 def parse_flash_descriptor(data):
-    print "Parsing Flash descriptor."
+    print("Parsing Flash descriptor.")
     flash = FlashDescriptor(data)
     if not flash.valid_header:
         return
@@ -60,13 +60,13 @@ def parse_flash_descriptor(data):
 
 
 def parse_me(data):
-    print "Parsing Intel ME"
+    print("Parsing Intel ME")
     me = MeContainer(data)
     _process_show_extract(me)
 
 
 def parse_pfs(data):
-    print "Parsing Dell PFS.HDR update"
+    print("Parsing Dell PFS.HDR update")
     pfs = PFSFile(data)
     if not pfs.check_header():
         return
@@ -74,14 +74,14 @@ def parse_pfs(data):
 
 
 def parse_firmware_volume(data, name=0):
-    print "Parsing FV at index (%s)." % hex(name)
+    print("Parsing FV at index (%s)." % hex(name))
     firmware_volume = FirmwareVolume(data, name)
     if not firmware_volume.valid_header:
         return
     _process_show_extract(firmware_volume)
 
     if args.generate is not None:
-        print "Generating FDF..."
+        print("Generating FDF...")
         firmware_volume.dump(args.generate)
         generator = uefi_generator.FirmwareVolumeGenerator(firmware_volume)
         path = os.path.join(args.generate, "%s-%s.fdf" % (args.generate, name))
@@ -118,8 +118,8 @@ if __name__ == "__main__":
         try:
             with open(file_name, 'rb') as fh:
                 input_data = fh.read()
-        except Exception, e:
-            print "Error: Cannot read file (%s) (%s)." % (file_name, str(e))
+        except Exception as e:
+            print("Error: Cannot read file (%s) (%s)." % (file_name, str(e)))
             continue
 
         firmware_type = None
@@ -131,7 +131,7 @@ if __name__ == "__main__":
                 break
 
         if args.test:
-            print "%s: %s" % (file_name, red(firmware_type))
+            print("%s: %s" % (file_name, red(firmware_type)))
             continue
 
         if args.brute:
@@ -162,4 +162,4 @@ if __name__ == "__main__":
             firmware = detected_parse_function(input_data)
             _process_show_extract(firmware)
         else:
-            print "Error: cannot parse %s, could not detect firmware type." % (file_name)
+            print("Error: cannot parse %s, could not detect firmware type." % (file_name))

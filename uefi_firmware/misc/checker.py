@@ -3,7 +3,7 @@ These are misc functions/classes to implement several type checkers.
 The TypeTester may be useful if parsing a large number of UEFI-related binaries.
 """
 
-from __future__ import absolute_import
+
 
 import re
 

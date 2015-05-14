@@ -25,6 +25,11 @@
 # Modified version 2013-12-29 Damien Zammit
 # Modified version 2014-01-10 Teddy Reed
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+
 import ctypes
 import struct
 import os
@@ -129,14 +134,14 @@ class MeModule(MeObject):
             return (self.structure.Flags >> 4) & 7
 
     def showinfo(self, ts=''):
-        print "%sModule %s, GUID: %s, Version: %s, Size: %s" % (
-            ts, self.name, self.guid, self.attrs["version"], self.attrs["module_size"]),
+        print("%sModule %s, GUID: %s, Version: %s, Size: %s" % (
+            ts, self.name, self.guid, self.attrs["version"], self.attrs["module_size"]), end=' ')
         if self.compression == COMP_TYPE_HUFFMAN:
-            print " (huffman)"
+            print(" (huffman)")
         elif self.compression == COMP_TYPE_LZMA:
-            print " (lzma)"
+            print(" (lzma)")
         else:
-            print ""
+            print("")
 
     def dump(self, parent=""):
         if self.compression == COMP_TYPE_HUFFMAN:
@@ -147,8 +152,8 @@ class MeModule(MeObject):
             try:
                 data = efi_compressor.LzmaDecompress(self.data, len(self.data))
                 dump_data("%s.module" % os.path.join(parent, self.name), data)
-            except Exception, e:
-                print "Cannot extract GUID (%s), %s" % (sguid(self.guid), str(e))
+            except Exception as e:
+                print("Cannot extract GUID (%s), %s" % (sguid(self.guid), str(e)))
                 return
             pass
         pass
@@ -207,10 +212,10 @@ class MeVariableModule(MeObject):
         pass
 
     def showinfo(self, ts=''):
-        print "%sVModule Tag: %s, size: %d" % (ts, self.tag, self.size)
+        print("%sVModule Tag: %s, size: %d" % (ts, self.tag, self.size))
         if self.tag == '$UDC':
-            print "%s  Update Tag: %s, name: %s, offset: %d, size: %s" % (
-                self.update["tag"], self.update["name"], self.update["offset"], self.update["size"])
+            print("%s  Update Tag: %s, name: %s, offset: %d, size: %s" % (
+                self.update["tag"], self.update["name"], self.update["offset"], self.update["size"]))
         pass
 
 
@@ -263,8 +268,8 @@ class MeLLUT(MeObject):
             self.structure_size:self.structure_size + self.chunkcount * 4]
 
     def showinfo(self, ts=''):
-        print "%sLLUT chunks (%d), chunk size (%d), start (%d), size (%d), base (%08X)." % (
-            ts, self.chunkcount, self.chunksize, self.start, self.size, self.decompression_base)
+        print("%sLLUT chunks (%d), chunk size (%d), start (%d), size (%d), base (%08X)." % (
+            ts, self.chunkcount, self.chunksize, self.start, self.size, self.decompression_base))
 
     def dump(self, parent='PART'):
         # print "Debug: relative (%d) absolute start (%d) len (%d)." % (
@@ -325,8 +330,8 @@ class MeManifestHeader(MeObject):
         return self.structure.HeaderLen * 4 + self._DATA_OFFSET
 
     def showinfo(self, ts=''):
-        print "Module Manifest type: %d, subtype: %d, partition name: %s" % (
-            self.structure.ModuleType, self.structure.ModuleSubType, self.structure.PartitionName)
+        print("Module Manifest type: %d, subtype: %d, partition name: %s" % (
+            self.structure.ModuleType, self.structure.ModuleSubType, self.structure.PartitionName))
         for module in self.modules:
             module.showinfo(ts="  %s" % ts)
         for module in self.variable_modules:
@@ -338,7 +343,7 @@ class MeManifestHeader(MeObject):
         # manifest).
         module_offset = 0
         huffman_offset = 0
-        for module_index in xrange(self.structure.NumModules):
+        for module_index in range(self.structure.NumModules):
             module = MeModule(
                 self.data[module_offset:],
                 self.header_type, module_offset + self.partition_offset)

@@ -1,3 +1,9 @@
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+
 import struct
 import os
 
@@ -112,11 +118,11 @@ class PFSSection(FirmwareObject, BaseObject):
         pass
 
     def showinfo(self, ts='', index=None):
-        print "%s%s %s spec %d ts %d type %d version %d size 0x%x (%d bytes)" % (
+        print("%s%s %s spec %d ts %d type %d version %d size 0x%x (%d bytes)" % (
             ts, blue("Dell PFSSection:"), green(sguid(self.uuid)),
             self.spec, self.ts, self.type, self.version,
             self.section_size, self.section_size
-        )
+        ))
 
         # print "Size (%d) S1 (%d) S2 (%d) S3 (%d)" % (
         #     len(self.section_data),
@@ -215,10 +221,10 @@ class PFSFile(FirmwareObject):
         pass
 
     def showinfo(self, ts='', index=None):
-        print "%s%s spec 0x%x size 0x%x (%d bytes)" % (
+        print("%s%s spec 0x%x size 0x%x (%d bytes)" % (
             ts, blue("DellPFS:"),
             self.spec, self.size, self.size
-        )
+        ))
         for section in self.sections:
             section.showinfo("%s  " % ts)
 

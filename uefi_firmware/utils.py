@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+
 import os
 import sys
 import struct
@@ -22,7 +27,7 @@ def purple(msg):
 
 
 def print_error(msg):
-    print >> sys.stderr, msg
+    print(msg, file=sys.stderr)
 
 
 def ascii_char(c):
@@ -33,13 +38,13 @@ def ascii_char(c):
 
 def hex_dump(data, size=16):
     def print_line(line):
-        print "%s | %s" % (
+        print("%s | %s" % (
             line.encode("hex"),
             "".join([ascii_char(c) for c in line])
-        )
+        ))
         pass
 
-    for i in xrange(0, len(data) / size):
+    for i in range(0, len(data) / size):
         data_line = data[i * size:i * size + size]
         print_line(data_line)
 
@@ -91,15 +96,15 @@ def dump_data(name, data):
                 os.makedirs(os.path.dirname(name))
         with open(name, 'wb') as fh:
             fh.write(data)
-        print "Wrote: %s" % (red(name))
-    except Exception, e:
-        print "Error: could not write (%s), (%s)." % (name, str(e))
+        print("Wrote: %s" % (red(name)))
+    except Exception as e:
+        print("Error: could not write (%s), (%s)." % (name, str(e)))
 
 
 def search_firmware_volumes(data, byte_align=16, limit=None):
     '''Search a blob for heuristics related to UEFI firmware volume headers.'''
     potential_volumes = []
-    for aligned in xrange(32, len(data), byte_align):
+    for aligned in range(32, len(data), byte_align):
         if data[aligned:aligned + 4] == '_FVH':
             potential_volumes.append(aligned)
             if limit and limit == len(potential_volumes):
